@@ -1,7 +1,7 @@
 use alloc::sync::Arc;
 use core::ops::Deref;
 
-use linked_list::{Adapter, Links, List};
+use linked_list::{GetLinks, Links, List};
 
 use crate::BaseScheduler;
 
@@ -13,11 +13,11 @@ pub struct FifoTask<T> {
     links: Links<Self>,
 }
 
-unsafe impl<T> Adapter for FifoTask<T> {
+impl<T> GetLinks for FifoTask<T> {
     type EntryType = Self;
 
     #[inline]
-    fn to_links(t: &Self) -> &Links<Self> {
+    fn get_links(t: &Self) -> &Links<Self> {
         &t.links
     }
 }
