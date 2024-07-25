@@ -7,7 +7,7 @@ use scheduler::BaseScheduler;
 
 // 静态优先级调度算法，相同优先级使用FIFO。
 // 调度算法不会自动调整任务的优先级，但可以手动调整。
-pub(super) struct StatPrioTask<T, const PRIO_LEVEL_NUM: usize> {
+pub struct StatPrioTask<T, const PRIO_LEVEL_NUM: usize> {
     inner: T,
     priority: AtomicUsize // 在该struct内保证priority合法
 }
@@ -41,7 +41,7 @@ impl<T, const N: usize> StatPrioTask<T, N> {
     }
 }
 
-pub(super) struct StatPrioScheduler<T, const PRIO_LEVEL_NUM: usize> {
+pub struct StatPrioScheduler<T, const PRIO_LEVEL_NUM: usize> {
     ready_queues: Vec<VecDeque<Arc<StatPrioTask<T, PRIO_LEVEL_NUM>>>>,
 }
 
