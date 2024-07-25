@@ -187,4 +187,8 @@ impl<T> BaseScheduler for CFScheduler<T> {
             false
         }
     }
+
+    fn highest_priority(&self) -> usize {
+        unimplemented!()
+    }
 }

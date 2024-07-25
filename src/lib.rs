@@ -12,6 +12,7 @@
 mod cfs;
 mod fifo;
 mod round_robin;
+mod static_priority;
 
 #[cfg(test)]
 mod tests;
@@ -21,6 +22,7 @@ extern crate alloc;
 pub use cfs::{CFSTask, CFScheduler};
 pub use fifo::{FifoScheduler, FifoTask};
 pub use round_robin::{RRScheduler, RRTask};
+pub use static_priority::{StatPrioScheduler, StatPrioTask};
 
 /// The base scheduler trait that all schedulers should implement.
 ///
@@ -66,4 +68,7 @@ pub trait BaseScheduler {
 
     /// set priority for a task
     fn set_priority(&mut self, task: &Self::SchedItem, prio: isize) -> bool;
+
+    /// get the hightest priority in this scheduler.
+    fn highest_priority(&self) -> usize;
 }

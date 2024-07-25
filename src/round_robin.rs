@@ -110,4 +110,8 @@ impl<T, const S: usize> BaseScheduler for RRScheduler<T, S> {
     fn set_priority(&mut self, _task: &Self::SchedItem, _prio: isize) -> bool {
         false
     }
+
+    fn highest_priority(&self) -> usize {
+        0
+    }
 }
