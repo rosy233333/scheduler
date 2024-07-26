@@ -1,9 +1,10 @@
 use core::isize;
 use core::sync::atomic::{AtomicUsize, Ordering};
+use core::ops::Deref;
 
 use alloc::collections::VecDeque;
 use alloc::{sync::Arc, vec::Vec};
-use scheduler::BaseScheduler;
+use crate::BaseScheduler;
 
 // 静态优先级调度算法，相同优先级使用FIFO。
 // 调度算法不会自动调整任务的优先级，但可以手动调整。
@@ -38,6 +39,14 @@ impl<T, const N: usize> StatPrioTask<T, N> {
 
     fn get_priority(&self) -> usize {
         self.priority.load(Ordering::Acquire)
+    }
+}
+
+impl<T, const N: usize> Deref for StatPrioTask<T, N> {
+    type Target = T;
+    #[inline]
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
 
