@@ -173,8 +173,11 @@ impl<T> BaseScheduler for CFScheduler<T> {
             .insert((prev.clone().get_vruntime(), taskid), prev);
     }
 
-    fn task_tick(&mut self, current: &Self::SchedItem) -> bool {
+    fn task_tick(&mut self, current: &Self::SchedItem) {
         current.task_tick();
+    }
+
+    fn scheduler_tick(&mut self, current: &Self::SchedItem) -> bool {
         self.min_vruntime.is_none()
             || current.get_vruntime() > self.min_vruntime.as_mut().unwrap().load(Ordering::Acquire)
     }

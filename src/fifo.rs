@@ -92,7 +92,9 @@ impl<T> BaseScheduler for FifoScheduler<T> {
         self.ready_queue.push_back(prev);
     }
 
-    fn task_tick(&mut self, _current: &Self::SchedItem) -> bool {
+    fn task_tick(&mut self, _current: &Self::SchedItem) { }
+
+    fn scheduler_tick(&mut self, _current: &Self::SchedItem) -> bool {
         false // no reschedule
     }
 

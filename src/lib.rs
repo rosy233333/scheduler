@@ -60,11 +60,20 @@ pub trait BaseScheduler {
     /// ready queue.
     fn put_prev_task(&mut self, prev: Self::SchedItem, preempt: bool);
 
+    // 分离了“更新任务状态”和“判断是否需要重调度”。
+    // 目前，scheduler_tick不会更新调度器状态，只会判断是否需要重调度
+    // 因此可以实现为：每个CPU都对全局调度器调用一次scheduler_tick
+
+    /// Advances the task state at each timer tick.
+    ///
+    /// `current` is the current running task.
+    fn task_tick(&mut self, current: &Self::SchedItem);
+
     /// Advances the scheduler state at each timer tick. Returns `true` if
     /// re-scheduling is required.
     ///
     /// `current` is the current running task.
-    fn task_tick(&mut self, current: &Self::SchedItem) -> bool;
+    fn scheduler_tick(&mut self, current: &Self::SchedItem) -> bool;
 
     /// set priority for a task
     fn set_priority(&mut self, task: &Self::SchedItem, prio: isize) -> bool;

@@ -93,8 +93,8 @@ impl<T, const S: usize> BaseScheduler for RRScheduler<T, S> {
         self.ready_queue.pop_front()
     }
 
-    fn put_prev_task(&mut self, prev: Self::SchedItem, preempt: bool) {
-        if prev.time_slice() > 0 && preempt {
+    fn put_prev_task(&mut self, prev: Self::SchedItem, _preempt: bool) {
+        if prev.time_slice() > 0 {
             self.ready_queue.push_front(prev)
         } else {
             prev.reset_time_slice();
@@ -102,9 +102,13 @@ impl<T, const S: usize> BaseScheduler for RRScheduler<T, S> {
         }
     }
 
-    fn task_tick(&mut self, current: &Self::SchedItem) -> bool {
-        let old_slice = current.time_slice.fetch_sub(1, Ordering::Release);
-        old_slice <= 1
+    fn task_tick(&mut self, current: &Self::SchedItem) {
+        current.time_slice.fetch_sub(1, Ordering::Release);
+    }
+
+    fn scheduler_tick(&mut self, current: &Self::SchedItem) -> bool {
+        let slice = current.time_slice.load(Ordering::Acquire);
+        slice <= 1
     }
 
     fn set_priority(&mut self, _task: &Self::SchedItem, _prio: isize) -> bool {

@@ -115,10 +115,12 @@ impl<T, const N: usize> BaseScheduler for StatPrioScheduler<T, N> {
         }
     }
 
-    fn task_tick(&mut self, current: &Self::SchedItem) -> bool {
+    fn task_tick(&mut self, _current: &Self::SchedItem) { }
+
+    fn scheduler_tick(&mut self, current: &Self::SchedItem) -> bool {
         let current_prio = current.get_priority();
         let self_prio = self.highest_priority();
-        self_prio > current_prio
+        self_prio < current_prio // 优先级数值越小，优先级越高
     }
 
     fn set_priority(&mut self, task: &Self::SchedItem, prio: isize) -> bool {
